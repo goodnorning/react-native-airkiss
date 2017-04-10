@@ -1,0 +1,29 @@
+{
+  "name": "react-native-airkiss",
+  "version": "0.1.0",
+  "description": "A react native wrapper for airkiss",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goodnorning/react-native-airkiss.git"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "airkiss",
+    "java",
+    "react-component"
+  ],
+  "author": "scott.lin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/goodnorning/react-native-airkiss/issues"
+  },
+  "homepage": "https://github.com/goodnorning/react-native-airkiss",
+  "devDependencies": {
+    "react-native": "^0.4.2"
+  }
+}
