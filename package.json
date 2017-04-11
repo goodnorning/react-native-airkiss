@@ -22,8 +22,5 @@
   "bugs": {
     "url": "https://github.com/goodnorning/react-native-airkiss/issues"
   },
-  "homepage": "https://github.com/goodnorning/react-native-airkiss",
-  "devDependencies": {
-    "react-native": "^0.4.2"
-  }
-}
+  "homepage": "https://github.com/goodnorning/react-native-airkiss"
+ }
