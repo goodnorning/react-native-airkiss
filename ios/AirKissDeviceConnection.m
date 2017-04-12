@@ -13,12 +13,8 @@
 @interface AirKissConnectionD()<GCDAsyncUdpSocketDelegate>
 {
     NSTimer           *_timer;          // 超过1分钟未连接成功则表示失败
-    
     GCDAsyncUdpSocket *_serverUdpSocket;
-    
     long              _tag;
-    int               _returnRandomNum;
-    
     BOOL              _gotDeviceData;
 }
 @end
@@ -38,32 +34,34 @@
 //}
 
 #pragma mark - Connection
-/**
- *  AirKiss连接
- *
- *  @param ssidStr ssid
- *  @param pswStr  psw
- */
 - (void)connectAirKissDevice {
 
     _tag                      = 0;
     _gotDeviceData            = false;
+    _timer =nil;
+    _serverUdpSocket = nil;
     [self setupServerUdpSocket];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:60
-                                              target:self
-                                            selector:@selector(connectionFailure)
-                                            userInfo:nil
-                                             repeats:NO];
+    //超过30S没有获取到信息，则结束
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _timer = [NSTimer scheduledTimerWithTimeInterval:30
+                                                  target:self
+                                                selector:@selector(getDeviceInfoFailure)
+                                                userInfo:nil
+                                                 repeats:NO];
+    });
 }
 
 - (void)closeConnection {
     _gotDeviceData = true;
     
-    [_timer invalidate];
-    _timer = nil;
-    
-    [_serverUdpSocket close];
-    _serverUdpSocket = nil;
+    if (_timer) {
+        [_timer invalidate];
+        _timer = nil;        
+    }
+    if (_serverUdpSocket) {
+        [_serverUdpSocket close];
+        _serverUdpSocket = nil;      
+    }
 }
 
 
@@ -87,11 +85,13 @@
 }
 
 #pragma mark - Event Response
-- (void)connectFailure {
-    [self closeConnection];
-    
-    if (_connectionFailure) {
-        _connectionFailure();
+- (void)getDeviceInfoFailure {
+    NSLog(@"timeout------------------------");
+    if (!_gotDeviceData) {
+        [self closeConnection];
+        if (_connectionFailure) {
+            _connectionFailure();
+        }       
     }
 }
 
@@ -128,7 +128,7 @@ withFilterContext:(id)filterContext
     }
 }
 -  (NSString*)parseNotifyData:(UInt8*)data length:(int)length {
-    NSLog(@"parseNotifyData,length=%d",length);
+    // NSLog(@"parseNotifyData,length=%d",length);
     Byte *newData = (Byte*)malloc(length);
     int count = 0;
     BOOL flag = false;
@@ -137,9 +137,9 @@ withFilterContext:(id)filterContext
         Byte num1 = data[count++];
         Byte num2 = data[count++];
         Byte num3 = data[count++];
-        NSLog(@"parseNotifyData,num0=0x%x,num1=0x%x,num2=0x%x,num3=0x%x",num0,num1,num2,num3);
+        // NSLog(@"parseNotifyData,num0=0x%x,num1=0x%x,num2=0x%x,num3=0x%x",num0,num1,num2,num3);
         if (num0 == kMagic_Num_0 && num1 == kMagic_Num_1 && num2 == kMagic_Num_2 && num3 == kMagic_Num_3) {
-            NSLog(@"-----------find magic num");
+            // NSLog(@"-----------find magic num");
             for (int i=0;i<length-count;i++){
                 newData[i] = data[count+i];
             }
@@ -153,7 +153,8 @@ withFilterContext:(id)filterContext
         length = length-count;
         while(count<length-2&&length>2) {
             uint16_t cmd = newData[count++];
-            cmd |= newData[count++]<<8;
+            cmd <<= 8;
+            cmd |= newData[count++];
             if(cmd == AIRKISS_LAN_SSDP_NOTIFY_CMD) {
                 Byte *buffer = (Byte*)malloc(length);
                 memset(buffer,0,length);
@@ -163,12 +164,15 @@ withFilterContext:(id)filterContext
                 }
                 NSData *aData = [[NSData alloc] initWithBytes:buffer length:len];
                 NSString *aString = [[NSString alloc] initWithData:aData encoding:NSUTF8StringEncoding];
-                NSLog(@"parseNotifyData------%@",aString);
+                // NSLog(@"parseNotifyData------%@",aString);
+                free(newData);
+                free(buffer);
                 return aString;
             }
         }
     }
-    return NULL;
+    free(newData);
+    return nil;
 }
 
 @end

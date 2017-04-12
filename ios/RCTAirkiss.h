@@ -13,6 +13,6 @@
 //FOUNDATION_EXPORT const unsigned char AirKissVersionString[];
 //
 //// In this header, you should import all the public headers of your framework using statements like #import <JMAirKiss/PublicHeader.h>
-@interface Airkiss : NSObject<RCTBridgeModule>
+@interface RCTAirkiss : NSObject<RCTBridgeModule>
 
 @end

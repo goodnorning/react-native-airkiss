@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		61EF33A01E9DD35C000C4BC2 /* AirKissConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF339D1E9DD35C000C4BC2 /* AirKissConnection.m */; };
 		61EF33A11E9DD35C000C4BC2 /* AirKissEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF339F1E9DD35C000C4BC2 /* AirKissEncoder.m */; };
-		61EF33A51E9DD4B1000C4BC2 /* Airkiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF33A41E9DD4B1000C4BC2 /* Airkiss.m */; };
+		61EF33A51E9DD4B1000C4BC2 /* RCTAirkiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF33A41E9DD4B1000C4BC2 /* RCTAirkiss.m */; };
 		61EF33A81E9DF478000C4BC2 /* AirKissDeviceConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 61EF33A71E9DF478000C4BC2 /* AirKissDeviceConnection.m */; };
 		73D9377D1AFF9EBE00450142 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9377C1AFF9EBE00450142 /* CFNetwork.framework */; };
 		73D9377F1AFF9F6E00450142 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73D9377E1AFF9F6E00450142 /* UIKit.framework */; };
@@ -35,8 +35,8 @@
 		61EF339E1E9DD35C000C4BC2 /* AirKissEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirKissEncoder.h; sourceTree = "<group>"; };
 		61EF339F1E9DD35C000C4BC2 /* AirKissEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirKissEncoder.m; sourceTree = "<group>"; };
 		61EF33A21E9DD364000C4BC2 /* AirKiss_Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirKiss_Defines.h; sourceTree = "<group>"; };
-		61EF33A31E9DD364000C4BC2 /* Airkiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Airkiss.h; sourceTree = "<group>"; };
-		61EF33A41E9DD4B1000C4BC2 /* Airkiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Airkiss.m; sourceTree = "<group>"; };
+		61EF33A31E9DD364000C4BC2 /* RCTAirkiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTAirkiss.h; sourceTree = "<group>"; };
+		61EF33A41E9DD4B1000C4BC2 /* RCTAirkiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RCTAirkiss.m; sourceTree = "<group>"; };
 		61EF33A61E9DF478000C4BC2 /* AirKissDeviceConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AirKissDeviceConnection.h; sourceTree = "<group>"; };
 		61EF33A71E9DF478000C4BC2 /* AirKissDeviceConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AirKissDeviceConnection.m; sourceTree = "<group>"; };
 		73D9377C1AFF9EBE00450142 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -80,8 +80,8 @@
 				61EF339E1E9DD35C000C4BC2 /* AirKissEncoder.h */,
 				61EF339F1E9DD35C000C4BC2 /* AirKissEncoder.m */,
 				61EF33A21E9DD364000C4BC2 /* AirKiss_Defines.h */,
-				61EF33A31E9DD364000C4BC2 /* Airkiss.h */,
-				61EF33A41E9DD4B1000C4BC2 /* Airkiss.m */,
+				61EF33A31E9DD364000C4BC2 /* RCTAirkiss.h */,
+				61EF33A41E9DD4B1000C4BC2 /* RCTAirkiss.m */,
 				134814211AA4EA7D00B7C361 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -142,7 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61EF33A51E9DD4B1000C4BC2 /* Airkiss.m in Sources */,
+				61EF33A51E9DD4B1000C4BC2 /* RCTAirkiss.m in Sources */,
 				73D937AA1AFFA5D100450142 /* GCDAsyncUdpSocket.m in Sources */,
 				61EF33A11E9DD35C000C4BC2 /* AirKissEncoder.m in Sources */,
 				61EF33A81E9DF478000C4BC2 /* AirKissDeviceConnection.m in Sources */,
