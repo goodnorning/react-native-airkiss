@@ -34,12 +34,14 @@ RCT_EXPORT_METHOD(start:(NSString*)ssid password:(NSString*)password callback:(R
                 NSMutableDictionary *dic = [NSMutableDictionary new];
                 [dic setObject:@(1) forKey:@"code"];
                 callback(@[dic]);
+                _airKissConnection = nil;//需要释放资源
             };
             
             _airKissConnection.connectionFailure = ^() {
                 NSMutableDictionary *dic = [NSMutableDictionary new];
                 [dic setObject:@(-1) forKey:@"code"];
                 callback(@[dic]);
+                _airKissConnection = nil;//需要释放资源
             };
         }
         
@@ -58,12 +60,14 @@ RCT_EXPORT_METHOD(startGetDeviceInfo:(RCTResponseSenderBlock)callback)
                 [dic setObject:@(1) forKey:@"code"];
                 [dic setObject:ret forKey:@"device"];
                 callback(@[dic]);
+                _airKissConnectionD = nil;//需要释放资源
             };
             
             _airKissConnectionD.connectionFailure = ^() {
                 NSMutableDictionary *dic = [NSMutableDictionary new];
                 [dic setObject:@(-1) forKey:@"code"];
                 callback(@[dic]);
+                _airKissConnectionD = nil;//需要释放资源
             };
         }
         
@@ -74,10 +78,14 @@ RCT_EXPORT_METHOD(startGetDeviceInfo:(RCTResponseSenderBlock)callback)
 
 RCT_EXPORT_METHOD(stop)
 {
-    if (_airKissConnection)
+    if (_airKissConnection) {
         [_airKissConnection closeConnection];
-    if (_airKissConnectionD)
+        _airKissConnection = nil;
+    }
+    if (_airKissConnectionD) {
         [_airKissConnectionD closeConnection];
+        _airKissConnectionD = nil;
+    }
 }
 
 @end

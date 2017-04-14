@@ -19,7 +19,8 @@
     long              _tag;
     int               _returnRandomNum;
     
-    BOOL              _connectionDone;
+    BOOL              _airkissDone;
+    BOOL              _callConnectFailed;
 }
 @end
 
@@ -32,8 +33,8 @@
         _airKissEncoder  = [[AirKissEncoder alloc] init];
         _tag             = 0;
         _returnRandomNum = 0;
-        _connectionDone  = false;
-        
+        _airkissDone = false;
+        _callConnectFailed = false;
         [self setupClientUdpSocket];
         [self setupServerUdpSocket];
     }
@@ -54,7 +55,8 @@
 
     _tag                      = 0;
     _returnRandomNum          = 0;
-    _connectionDone           = false;
+    _callConnectFailed           = false;
+    _airkissDone = false;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -66,7 +68,7 @@
         });
         
         for (int i = 0;i < dataArray.count;i++) {
-            if (_connectionDone == true) {
+            if (_airkissDone == true) {
                 break;
             }
             UInt16   length      = [dataArray[i] unsignedShortValue];
@@ -75,7 +77,6 @@
             for (int j = 0; j < length; j++) {
                 [mData appendBytes:&value length:1];
             }
-//            NSLog(@"%d",length);
             [_clientUdpSocket sendData:mData
                                 toHost:kAirKiss_Host
                                   port:kAirKiss_Port
@@ -86,14 +87,14 @@
             
             _tag++;
         }
-        if (!_connectionDone && _connectionFailure) {
+        if (!_airkissDone && _connectionFailure && !_callConnectFailed) {
+            _callConnectFailed = true;
             _connectionFailure();
         }
     });
 }
 
 - (void)closeConnection {
-    _connectionDone = true;
     
     [_timer invalidate];
     _timer = nil;
@@ -103,6 +104,15 @@
     
     _clientUdpSocket = nil;
     _serverUdpSocket = nil;
+}
+
+#pragma mark - 连接失败
+- (void)connectFailure {
+    [self closeConnection];
+    if (_connectionFailure && !_airkissDone && !_callConnectFailed) {
+        _callConnectFailed = true;
+        _connectionFailure();
+    }
 }
 
 #pragma mark - Set up udp socket
@@ -145,18 +155,6 @@
     }
 }
 
-#pragma mark - Event Response
-- (void)connectFailure {
-    [_timer invalidate];
-    _timer          = nil;
-    
-    _connectionDone = true;
-    
-    if (_connectionFailure) {
-        _connectionFailure();
-    }
-}
-
 #pragma mark - GCDAsyncUdpSocketDelegate
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
 {
@@ -174,7 +172,7 @@
 withFilterContext:(id)filterContext
 {
     if (_serverUdpSocket == sock) {
-        if (_connectionDone) {
+        if (_airkissDone) {
             return;
         }
 
@@ -185,10 +183,8 @@ withFilterContext:(id)filterContext
                 _returnRandomNum++;
                 if (_returnRandomNum >= kAirKiss_Limit_Return_Random_Num) {
                     // 成功
-                    [_timer invalidate];
-                    _timer = nil;
-                    
-                    _connectionDone = true;
+                    _airkissDone = true;
+                    [self closeConnection];
                     if (_connectionSuccess) {
                         _connectionSuccess();
                     }

@@ -16,6 +16,7 @@
     GCDAsyncUdpSocket *_serverUdpSocket;
     long              _tag;
     BOOL              _gotDeviceData;
+    BOOL              _failureCalled;
 }
 @end
 
@@ -38,6 +39,7 @@
 
     _tag                      = 0;
     _gotDeviceData            = false;
+    _failureCalled = false;
     _timer =nil;
     _serverUdpSocket = nil;
     [self setupServerUdpSocket];
@@ -89,7 +91,8 @@
     NSLog(@"timeout------------------------");
     if (!_gotDeviceData) {
         [self closeConnection];
-        if (_connectionFailure) {
+        if (_connectionFailure && !_failureCalled) {
+            _failureCalled = true;
             _connectionFailure();
         }       
     }
